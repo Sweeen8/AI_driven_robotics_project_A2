@@ -1,0 +1,22 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0" version="29.6.4">
+  <diagram name="Page-1" id="s88X1Dz4EoiQe6MwSbRh">
+    <mxGraphModel dx="1426" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="TaXBY3GZbvzrMLzDWibS-29" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" value="&lt;div&gt;Robot&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="80" x="220" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="TaXBY3GZbvzrMLzDWibS-30" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;div&gt;Wat ontvang de robot?:&lt;/div&gt;&lt;div&gt;&lt;span&gt;- task_id&lt;/span&gt;&lt;br&gt;&lt;span&gt;- command_type: PICK_AND_PLACE / HOME / STOP / RESET&lt;/span&gt;&lt;br&gt;&lt;span&gt;- object_class&lt;/span&gt;&lt;br&gt;&lt;span&gt;- pickup_x&lt;/span&gt;&lt;br&gt;&lt;span&gt;- pickup_y&lt;/span&gt;&lt;br&gt;&lt;span&gt;- pickup_z&lt;/span&gt;&lt;br&gt;&lt;span&gt;- object_orientation&lt;/span&gt;&lt;br&gt;&lt;span&gt;- target_bin&lt;/span&gt;&lt;br&gt;&lt;span&gt;- target_drop_x&lt;/span&gt;&lt;br&gt;&lt;span&gt;- target_drop_y&lt;/span&gt;&lt;br&gt;&lt;span&gt;- target_drop_z&lt;/span&gt;&lt;br&gt;&lt;span&gt;- speed_limit&lt;/span&gt;&lt;br&gt;&lt;span&gt;- motion_allowed&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="160" width="200" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="TaXBY3GZbvzrMLzDWibS-31" parent="1" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Wanneer mag de robot bewegen?&lt;/h1&gt;&lt;p&gt;Als de status motion_allowed == true&lt;/p&gt;&lt;p&gt;system_state !=E_stop&lt;/p&gt;&lt;p&gt;detection_valid == true&lt;/p&gt;&lt;p&gt;confidence &amp;gt;=0.85&lt;/p&gt;" vertex="1">
+          <mxGeometry height="250" width="190" x="20" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="TaXBY3GZbvzrMLzDWibS-32" parent="1" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Wat publiceerd de robot?&lt;/h1&gt;&lt;p&gt;-Task_Id&lt;br&gt;De opdrachten of welke stap de robot zit.&lt;/p&gt;&lt;p&gt;&lt;br&gt;motion_state&lt;br&gt;geeft door (IDLE, PLANNING_PATH, MOVING_TO_PICK, PICKING, MOVING_TO_DROP, DROPPING, TERUG_HOME, KLAAR, FAILED, STOPPED.&lt;/p&gt;&lt;p&gt;&lt;br&gt;current_step&lt;br&gt;geeft door (Wachten, Beweging plannen, Bewegen naar [object], [object] oppakken, Bewegen naar sorteer doos [nr], [object] sorteeren, Bewegen naar home positie, Opdracht klaar, ERROR beweging niet mogelijk, Opdracht gestopt)&lt;/p&gt;&lt;p&gt;&lt;br&gt;Robot_ready&lt;br&gt;Geeft door TRUE of FALSE als de robot beweegbaar is of opdracht kan bewerken.&lt;/p&gt;&lt;p&gt;gripper_state&lt;br&gt;Geeft door de status van de gripper (AAN of UIT)&lt;/p&gt;path_planning_state:&lt;br&gt;IDLE / PLANNING / PLAN_FOUND / PLAN_FAILED&lt;br&gt;&lt;br&gt;path_planning_success:&lt;br&gt;TRUE als MoveIt2 een geldig pad heeft gevonden.&lt;br&gt;&lt;br&gt;collision_free:&lt;br&gt;TRUE als het geplande pad geen botsing veroorzaakt.&lt;p&gt;execution_success&lt;span&gt;execution_success:&lt;/span&gt;&lt;br&gt;&lt;span&gt;Geeft TRUE wanneer de volledige beweging succesvol is uitgevoerd.&lt;/span&gt;&lt;br&gt;&lt;span&gt;Geeft FALSE wanneer de beweging is mislukt, afgebroken of gestopt.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;current_pos:&lt;br&gt;Geeft door de x, y, z, roll, pitch, yaw&amp;nbsp; positie van de robot.&lt;/p&gt;&lt;p&gt;&lt;span&gt;target_pose_reachable:&lt;/span&gt;&lt;br&gt;&lt;span&gt;Geeft TRUE of FALSE als de opgegeven pick/drop positie bereikbaar is voor de robot.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;error_code:&lt;br&gt;[Stap_nummer] Is er een probleem bij [Node, Row]&lt;/p&gt;&lt;p&gt;error_message&lt;br&gt;ERROR, er is een fout bij [Stap_nummer]&lt;/p&gt;&lt;p&gt;stop_reason:&lt;br&gt;NONE / E_STOP / LOW_CONFIDENCE / UNREACHABLE_POSE / PLANNING_FAILED / GRIPPER_FAILED / COLLISION_RISK / OPERATOR_STOP&lt;/p&gt;" vertex="1">
+          <mxGeometry height="810" width="400" x="380" y="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

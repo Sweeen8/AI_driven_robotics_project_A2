@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"
+       name="a2_workcell">
+
+  <material name="brown">
+    <color rgba="0.45 0.22 0.08 1.0"/>
+  </material>
+
+  <link name="environment_root"/>
+
+  <link name="table_top">
+    <visual>
+      <geometry>
+        <box size="1.60 0.80 0.025"/>
+      </geometry>
+      <material name="brown"/>
+    </visual>
+
+    <collision>
+      <geometry>
+        <box size="1.60 0.80 0.025"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="environment_root_to_table_top" type="fixed">
+    <parent link="environment_root"/>
+    <child link="table_top"/>
+    <origin xyz="0 0 0.7375" rpy="0 0 0"/>
+  </joint>
+
+</robot>

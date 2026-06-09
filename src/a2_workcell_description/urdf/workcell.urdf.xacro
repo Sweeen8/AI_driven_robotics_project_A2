@@ -3,31 +3,539 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro"
        name="a2_workcell">
 
+  <!-- ====================================================== -->
+  <!-- AFMETINGEN IN METERS                                   -->
+  <!-- ====================================================== -->
+
+  <!-- Hoofdtafel -->
+  <xacro:property name="table_length" value="1.60"/>
+  <xacro:property name="table_depth" value="0.80"/>
+  <xacro:property name="table_top_thickness" value="0.025"/>
+
+  <xacro:property name="table_leg_height" value="0.725"/>
+  <xacro:property name="table_leg_size" value="0.032"/>
+  <xacro:property name="table_leg_edge_offset" value="0.10"/>
+
+  <!-- Verhoogd robotwerkplatform -->
+  <xacro:property name="platform_length" value="0.80"/>
+  <xacro:property name="platform_depth" value="0.60"/>
+  <xacro:property name="platform_thickness" value="0.019"/>
+
+  <!-- Tijdelijke breedte van de steunpoten -->
+  <xacro:property name="support_size_x" value="0.060"/>
+  <xacro:property name="support_size_y" value="0.060"/>
+  <xacro:property name="support_height" value="0.040"/>
+
+  <!-- Metalen plaat onder de Lite 6 -->
+  <xacro:property name="mount_plate_length" value="0.185"/>
+  <xacro:property name="mount_plate_depth" value="0.130"/>
+  <xacro:property name="mount_plate_thickness" value="0.005"/>
+
+  <!-- Stoel -->
+  <xacro:property name="chair_width" value="0.45"/>
+  <xacro:property name="chair_depth" value="0.45"/>
+  <xacro:property name="chair_seat_thickness" value="0.030"/>
+  <xacro:property name="chair_leg_height" value="0.450"/>
+  <xacro:property name="chair_leg_size" value="0.030"/>
+  <xacro:property name="chair_back_height" value="0.450"/>
+  <xacro:property name="chair_back_thickness" value="0.025"/>
+
+  <!-- ====================================================== -->
+  <!-- BEREKENDE POSITIES                                     -->
+  <!-- ====================================================== -->
+
+  <!-- Midden van het tafelblad boven de vloer -->
+  <xacro:property
+      name="table_top_z"
+      value="${table_leg_height + table_top_thickness / 2.0}"/>
+
+  <!-- Horizontale posities van de tafelpoten -->
+  <xacro:property
+      name="table_leg_x"
+      value="${table_length / 2.0
+              - table_leg_edge_offset
+              - table_leg_size / 2.0}"/>
+
+  <xacro:property
+      name="table_leg_y"
+      value="${table_depth / 2.0
+              - table_leg_edge_offset
+              - table_leg_size / 2.0}"/>
+
+  <!-- Tafelpoot ten opzichte van midden tafelblad -->
+  <xacro:property
+      name="table_leg_relative_z"
+      value="${-(table_top_thickness / 2.0
+                 + table_leg_height / 2.0)}"/>
+
+  <!-- Steunpoten dicht bij de hoeken van het robotplatform -->
+  <xacro:property
+      name="support_x"
+      value="${platform_length / 2.0 - 0.060}"/>
+
+  <xacro:property
+      name="support_y"
+      value="${platform_depth / 2.0 - 0.060}"/>
+
+  <!-- Steunpoten staan direct op het tafelblad -->
+  <xacro:property
+      name="support_relative_z"
+      value="${table_top_thickness / 2.0
+              + support_height / 2.0}"/>
+
+  <!-- Platform rust op de steunpoten -->
+  <xacro:property
+      name="platform_relative_z"
+      value="${table_top_thickness / 2.0
+              + support_height
+              + platform_thickness / 2.0}"/>
+
+  <!-- Montageplaat ligt op het platform -->
+  <xacro:property
+      name="mount_plate_relative_z"
+      value="${platform_thickness / 2.0
+              + mount_plate_thickness / 2.0}"/>
+
+  <!-- ====================================================== -->
+  <!-- MATERIALEN                                             -->
+  <!-- ====================================================== -->
+
   <material name="brown">
     <color rgba="0.45 0.22 0.08 1.0"/>
   </material>
 
+  <material name="blue">
+    <color rgba="0.05 0.20 0.80 1.0"/>
+  </material>
+
+  <material name="dark_grey">
+    <color rgba="0.18 0.18 0.18 1.0"/>
+  </material>
+
+  <material name="metal_grey">
+    <color rgba="0.60 0.60 0.60 1.0"/>
+  </material>
+
+  <material name="floor_grey">
+    <color rgba="0.30 0.30 0.30 1.0"/>
+  </material>
+
+  <!-- ====================================================== -->
+  <!-- HERBRUIKBARE BOX-MACRO                                 -->
+  <!-- ====================================================== -->
+
+  <xacro:macro
+      name="box_link"
+      params="name size_x size_y size_z material_name">
+
+    <link name="${name}">
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+
+        <geometry>
+          <box size="${size_x} ${size_y} ${size_z}"/>
+        </geometry>
+
+        <material name="${material_name}"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+
+        <geometry>
+          <box size="${size_x} ${size_y} ${size_z}"/>
+        </geometry>
+      </collision>
+
+    </link>
+
+  </xacro:macro>
+
+  <!-- ====================================================== -->
+  <!-- ROOT EN VLOER                                          -->
+  <!-- ====================================================== -->
+
   <link name="environment_root"/>
 
-  <link name="table_top">
-    <visual>
-      <geometry>
-        <box size="1.60 0.80 0.025"/>
-      </geometry>
-      <material name="brown"/>
-    </visual>
+  <xacro:box_link
+      name="floor"
+      size_x="3.0"
+      size_y="3.0"
+      size_z="0.01"
+      material_name="floor_grey"/>
 
-    <collision>
-      <geometry>
-        <box size="1.60 0.80 0.025"/>
-      </geometry>
-    </collision>
-  </link>
+  <joint name="environment_root_to_floor" type="fixed">
+    <parent link="environment_root"/>
+    <child link="floor"/>
+
+    <origin xyz="0 0 -0.005" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ====================================================== -->
+  <!-- TAFELBLAD                                              -->
+  <!-- ====================================================== -->
+
+  <xacro:box_link
+      name="table_top"
+      size_x="${table_length}"
+      size_y="${table_depth}"
+      size_z="${table_top_thickness}"
+      material_name="brown"/>
 
   <joint name="environment_root_to_table_top" type="fixed">
     <parent link="environment_root"/>
     <child link="table_top"/>
-    <origin xyz="0 0 0.7375" rpy="0 0 0"/>
+
+    <origin xyz="0 0 ${table_top_z}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ====================================================== -->
+  <!-- VIER TAFELPOTEN                                        -->
+  <!-- ====================================================== -->
+
+  <xacro:box_link
+      name="table_leg_front_left"
+      size_x="${table_leg_size}"
+      size_y="${table_leg_size}"
+      size_z="${table_leg_height}"
+      material_name="blue"/>
+
+  <joint name="table_top_to_leg_front_left" type="fixed">
+    <parent link="table_top"/>
+    <child link="table_leg_front_left"/>
+
+    <origin
+        xyz="${table_leg_x}
+             ${-table_leg_y}
+             ${table_leg_relative_z}"
+        rpy="0 0 0"/>
+  </joint>
+
+  <xacro:box_link
+      name="table_leg_front_right"
+      size_x="${table_leg_size}"
+      size_y="${table_leg_size}"
+      size_z="${table_leg_height}"
+      material_name="blue"/>
+
+  <joint name="table_top_to_leg_front_right" type="fixed">
+    <parent link="table_top"/>
+    <child link="table_leg_front_right"/>
+
+    <origin
+        xyz="${-table_leg_x}
+             ${-table_leg_y}
+             ${table_leg_relative_z}"
+        rpy="0 0 0"/>
+  </joint>
+
+  <xacro:box_link
+      name="table_leg_back_left"
+      size_x="${table_leg_size}"
+      size_y="${table_leg_size}"
+      size_z="${table_leg_height}"
+      material_name="blue"/>
+
+  <joint name="table_top_to_leg_back_left" type="fixed">
+    <parent link="table_top"/>
+    <child link="table_leg_back_left"/>
+
+    <origin
+        xyz="${table_leg_x}
+             ${table_leg_y}
+             ${table_leg_relative_z}"
+        rpy="0 0 0"/>
+  </joint>
+
+  <xacro:box_link
+      name="table_leg_back_right"
+      size_x="${table_leg_size}"
+      size_y="${table_leg_size}"
+      size_z="${table_leg_height}"
+      material_name="blue"/>
+
+  <joint name="table_top_to_leg_back_right" type="fixed">
+    <parent link="table_top"/>
+    <child link="table_leg_back_right"/>
+
+    <origin
+        xyz="${-table_leg_x}
+             ${table_leg_y}
+             ${table_leg_relative_z}"
+        rpy="0 0 0"/>
+  </joint>
+
+  <!-- ====================================================== -->
+  <!-- STEUNPOTEN OP HET TAFELBLAD                            -->
+  <!-- ====================================================== -->
+
+  <xacro:box_link
+      name="platform_support_front_left"
+      size_x="${support_size_x}"
+      size_y="${support_size_y}"
+      size_z="${support_height}"
+      material_name="blue"/>
+
+  <joint name="table_top_to_platform_support_front_left"
+         type="fixed">
+
+    <parent link="table_top"/>
+    <child link="platform_support_front_left"/>
+
+    <origin
+        xyz="${support_x}
+             ${-support_y}
+             ${support_relative_z}"
+        rpy="0 0 0"/>
+  </joint>
+
+  <xacro:box_link
+      name="platform_support_front_right"
+      size_x="${support_size_x}"
+      size_y="${support_size_y}"
+      size_z="${support_height}"
+      material_name="blue"/>
+
+  <joint name="table_top_to_platform_support_front_right"
+         type="fixed">
+
+    <parent link="table_top"/>
+    <child link="platform_support_front_right"/>
+
+    <origin
+        xyz="${-support_x}
+             ${-support_y}
+             ${support_relative_z}"
+        rpy="0 0 0"/>
+  </joint>
+
+  <xacro:box_link
+      name="platform_support_back_left"
+      size_x="${support_size_x}"
+      size_y="${support_size_y}"
+      size_z="${support_height}"
+      material_name="blue"/>
+
+  <joint name="table_top_to_platform_support_back_left"
+         type="fixed">
+
+    <parent link="table_top"/>
+    <child link="platform_support_back_left"/>
+
+    <origin
+        xyz="${support_x}
+             ${support_y}
+             ${support_relative_z}"
+        rpy="0 0 0"/>
+  </joint>
+
+  <xacro:box_link
+      name="platform_support_back_right"
+      size_x="${support_size_x}"
+      size_y="${support_size_y}"
+      size_z="${support_height}"
+      material_name="blue"/>
+
+  <joint name="table_top_to_platform_support_back_right"
+         type="fixed">
+
+    <parent link="table_top"/>
+    <child link="platform_support_back_right"/>
+
+    <origin
+        xyz="${-support_x}
+             ${support_y}
+             ${support_relative_z}"
+        rpy="0 0 0"/>
+  </joint>
+
+  <!-- ====================================================== -->
+  <!-- ROBOTWERKPLATFORM                                      -->
+  <!-- ====================================================== -->
+
+  <xacro:box_link
+      name="workcell_platform"
+      size_x="${platform_length}"
+      size_y="${platform_depth}"
+      size_z="${platform_thickness}"
+      material_name="dark_grey"/>
+
+  <joint name="table_top_to_workcell_platform" type="fixed">
+    <parent link="table_top"/>
+    <child link="workcell_platform"/>
+
+    <origin
+        xyz="0 0 ${platform_relative_z}"
+        rpy="0 0 0"/>
+  </joint>
+
+  <!-- ====================================================== -->
+  <!-- ROBOTMONTAGEPLAAT                                      -->
+  <!-- ====================================================== -->
+
+  <xacro:box_link
+      name="robot_mounting_plate"
+      size_x="${mount_plate_length}"
+      size_y="${mount_plate_depth}"
+      size_z="${mount_plate_thickness}"
+      material_name="metal_grey"/>
+
+  <joint name="workcell_platform_to_mounting_plate"
+         type="fixed">
+
+    <parent link="workcell_platform"/>
+    <child link="robot_mounting_plate"/>
+
+    <origin
+        xyz="0 0.235 ${mount_plate_relative_z}"
+        rpy="0 0 0"/>
+  </joint>
+
+  <!--
+    Referentieframe op de bovenkant van de montageplaat.
+    Hier moet later de officiële Lite 6-base aan gekoppeld worden.
+  -->
+
+  <link name="robot_mount_frame"/>
+
+  <joint name="mounting_plate_to_robot_mount_frame"
+         type="fixed">
+
+    <parent link="robot_mounting_plate"/>
+    <child link="robot_mount_frame"/>
+
+    <origin
+        xyz="0 0 ${mount_plate_thickness / 2.0}"
+        rpy="0 0 0"/>
+  </joint>
+
+  <!-- ====================================================== -->
+  <!-- STOEL VOOR DE TAFEL                                    -->
+  <!-- ====================================================== -->
+
+  <xacro:box_link
+      name="chair_seat"
+      size_x="${chair_width}"
+      size_y="${chair_depth}"
+      size_z="${chair_seat_thickness}"
+      material_name="brown"/>
+
+  <joint name="environment_root_to_chair_seat" type="fixed">
+    <parent link="environment_root"/>
+    <child link="chair_seat"/>
+
+    <origin
+        xyz="0
+             -0.80
+             ${chair_leg_height + chair_seat_thickness / 2.0}"
+        rpy="0 0 3.14159"/>
+  </joint>
+
+  <!-- Stoelpoot linksvoor -->
+
+  <xacro:box_link
+      name="chair_leg_front_left"
+      size_x="${chair_leg_size}"
+      size_y="${chair_leg_size}"
+      size_z="${chair_leg_height}"
+      material_name="blue"/>
+
+  <joint name="chair_seat_to_leg_front_left" type="fixed">
+    <parent link="chair_seat"/>
+    <child link="chair_leg_front_left"/>
+
+    <origin
+        xyz="${chair_width / 2.0 - 0.04}
+             ${-chair_depth / 2.0 + 0.04}
+             ${-(chair_seat_thickness / 2.0
+                + chair_leg_height / 2.0)}"
+        rpy="0 0 0"/>
+  </joint>
+
+  <!-- Stoelpoot rechtsvoor -->
+
+  <xacro:box_link
+      name="chair_leg_front_right"
+      size_x="${chair_leg_size}"
+      size_y="${chair_leg_size}"
+      size_z="${chair_leg_height}"
+      material_name="blue"/>
+
+  <joint name="chair_seat_to_leg_front_right" type="fixed">
+    <parent link="chair_seat"/>
+    <child link="chair_leg_front_right"/>
+
+    <origin
+        xyz="${-chair_width / 2.0 + 0.04}
+             ${-chair_depth / 2.0 + 0.04}
+             ${-(chair_seat_thickness / 2.0
+                + chair_leg_height / 2.0)}"
+        rpy="0 0 0"/>
+  </joint>
+
+  <!-- Stoelpoot linksachter -->
+
+  <xacro:box_link
+      name="chair_leg_back_left"
+      size_x="${chair_leg_size}"
+      size_y="${chair_leg_size}"
+      size_z="${chair_leg_height}"
+      material_name="blue"/>
+
+  <joint name="chair_seat_to_leg_back_left" type="fixed">
+    <parent link="chair_seat"/>
+    <child link="chair_leg_back_left"/>
+
+    <origin
+        xyz="${chair_width / 2.0 - 0.04}
+             ${chair_depth / 2.0 - 0.04}
+             ${-(chair_seat_thickness / 2.0
+                + chair_leg_height / 2.0)}"
+        rpy="0 0 0"/>
+  </joint>
+
+  <!-- Stoelpoot rechtsachter -->
+
+  <xacro:box_link
+      name="chair_leg_back_right"
+      size_x="${chair_leg_size}"
+      size_y="${chair_leg_size}"
+      size_z="${chair_leg_height}"
+      material_name="blue"/>
+
+  <joint name="chair_seat_to_leg_back_right" type="fixed">
+    <parent link="chair_seat"/>
+    <child link="chair_leg_back_right"/>
+
+    <origin
+        xyz="${-chair_width / 2.0 + 0.04}
+             ${chair_depth / 2.0 - 0.04}
+             ${-(chair_seat_thickness / 2.0
+                + chair_leg_height / 2.0)}"
+        rpy="0 0 0"/>
+  </joint>
+
+  <!-- Rugleuning -->
+
+  <xacro:box_link
+      name="chair_backrest"
+      size_x="${chair_width}"
+      size_y="${chair_back_thickness}"
+      size_z="${chair_back_height}"
+      material_name="brown"/>
+
+  <joint name="chair_seat_to_backrest" type="fixed">
+    <parent link="chair_seat"/>
+    <child link="chair_backrest"/>
+
+    <origin
+        xyz="0
+             ${chair_depth / 2.0
+               - chair_back_thickness / 2.0}
+             ${chair_seat_thickness / 2.0
+               + chair_back_height / 2.0}"
+        rpy="0 0 0"/>
   </joint>
 
 </robot>

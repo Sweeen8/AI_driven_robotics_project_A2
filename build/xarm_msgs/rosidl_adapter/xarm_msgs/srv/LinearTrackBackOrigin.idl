@@ -1,0 +1,25 @@
+// generated from rosidl_adapter/resource/srv.idl.em
+// with input from xarm_msgs/srv/LinearTrackBackOrigin.srv
+// generated code does not contain a copyright notice
+
+
+module xarm_msgs {
+  module srv {
+    @verbatim (language="comment", text=
+      "Has been renamed, please use LinearMotorBackOrigin instead" "\n"
+      "This format is suitable for the following services" "\n"
+      "  - set_linear_motor_back_origin  # The old name is set_linear_track_back_origin, please use the new one")
+    struct LinearTrackBackOrigin_Request {
+      @default (value=TRUE)
+      boolean wait;
+
+      @default (value=TRUE)
+      boolean auto_enable;
+    };
+    struct LinearTrackBackOrigin_Response {
+      int16 ret;
+
+      string message;
+    };
+  };
+};

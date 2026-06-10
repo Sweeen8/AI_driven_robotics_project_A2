@@ -1,0 +1,35 @@
+// generated from rosidl_adapter/resource/srv.idl.em
+// with input from xarm_msgs/srv/FtForceConfig.srv
+// generated code does not contain a copyright notice
+
+
+module xarm_msgs {
+  module srv {
+    @verbatim (language="comment", text=
+      "please use FtForceParams instead" "\n"
+      "This format is suitable for the following services" "\n"
+      "  - config_force_control  # please use set_ft_sensor_force_parameters instead")
+    struct FtForceConfig_Request {
+      @verbatim (language="comment", text=
+        "task frame (0: base frame. 1: tool frame)")
+      int16 coord;
+
+      @verbatim (language="comment", text=
+        "a 6d vector of 0s and 1s. 1 means that robot will be compliant in the corresponding axis of the task frame.")
+      sequence<int16> c_axis;
+
+      @verbatim (language="comment", text=
+        "6d vector, the forces/torques the robot will apply to its environment. The robot adjusts its position along/about compliant axis in order to achieve the specified force/torque.")
+      sequence<float> ref;
+
+      @verbatim (language="comment", text=
+        "6d vector, for compliant axes, these values are the maximum allowed tcp speed along/about the axis.")
+      sequence<float> limits;
+    };
+    struct FtForceConfig_Response {
+      int16 ret;
+
+      string message;
+    };
+  };
+};

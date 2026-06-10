@@ -1,0 +1,9 @@
+/home/student/Git-projects/AI_driven_robotics_project_A2/build/a2_workcell_description/CMakeFiles/uninstall.dir
+/home/student/Git-projects/AI_driven_robotics_project_A2/build/a2_workcell_description/CMakeFiles/a2_workcell_description_uninstall.dir
+/home/student/Git-projects/AI_driven_robotics_project_A2/build/a2_workcell_description/CMakeFiles/test.dir
+/home/student/Git-projects/AI_driven_robotics_project_A2/build/a2_workcell_description/CMakeFiles/edit_cache.dir
+/home/student/Git-projects/AI_driven_robotics_project_A2/build/a2_workcell_description/CMakeFiles/rebuild_cache.dir
+/home/student/Git-projects/AI_driven_robotics_project_A2/build/a2_workcell_description/CMakeFiles/list_install_components.dir
+/home/student/Git-projects/AI_driven_robotics_project_A2/build/a2_workcell_description/CMakeFiles/install.dir
+/home/student/Git-projects/AI_driven_robotics_project_A2/build/a2_workcell_description/CMakeFiles/install/local.dir
+/home/student/Git-projects/AI_driven_robotics_project_A2/build/a2_workcell_description/CMakeFiles/install/strip.dir

@@ -47,7 +47,7 @@ def generate_launch_description() -> LaunchDescription:
             "--z", "0",
             "--roll", "0",
             "--pitch", "0",
-            "--yaw", "0",
+            "--yaw", "-1.5708",
             "--frame-id", "robot_mount_frame",
             "--child-frame-id", "world",
         ],

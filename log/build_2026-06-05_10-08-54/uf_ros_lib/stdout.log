@@ -1,0 +1,20 @@
+running develop
+running egg_info
+creating uf_ros_lib.egg-info
+writing uf_ros_lib.egg-info/PKG-INFO
+writing dependency_links to uf_ros_lib.egg-info/dependency_links.txt
+writing requirements to uf_ros_lib.egg-info/requires.txt
+writing top-level names to uf_ros_lib.egg-info/top_level.txt
+writing manifest file 'uf_ros_lib.egg-info/SOURCES.txt'
+reading manifest file 'uf_ros_lib.egg-info/SOURCES.txt'
+writing manifest file 'uf_ros_lib.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/student/Git-projects/AI_driven_robotics_project_A2/install/uf_ros_lib/lib/python3.12/site-packages/uf-ros-lib.egg-link (link to .)
+
+Installed /home/student/Git-projects/AI_driven_robotics_project_A2/build/uf_ros_lib
+running symlink_data
+creating /home/student/Git-projects/AI_driven_robotics_project_A2/install/uf_ros_lib/share/ament_index
+creating /home/student/Git-projects/AI_driven_robotics_project_A2/install/uf_ros_lib/share/ament_index/resource_index
+creating /home/student/Git-projects/AI_driven_robotics_project_A2/install/uf_ros_lib/share/ament_index/resource_index/packages
+symbolically linking /home/student/Git-projects/AI_driven_robotics_project_A2/build/uf_ros_lib/resource/uf_ros_lib -> /home/student/Git-projects/AI_driven_robotics_project_A2/install/uf_ros_lib/share/ament_index/resource_index/packages
+symbolically linking /home/student/Git-projects/AI_driven_robotics_project_A2/build/uf_ros_lib/package.xml -> /home/student/Git-projects/AI_driven_robotics_project_A2/install/uf_ros_lib/share/uf_ros_lib

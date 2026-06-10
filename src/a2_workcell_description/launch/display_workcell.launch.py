@@ -12,36 +12,50 @@ def generate_launch_description() -> LaunchDescription:
     )
 
     xacro_file = package_share / "urdf" / "workcell.urdf.xacro"
-    rviz_config = package_share / "rviz" / "workcell.rviz"
 
-    robot_description = xacro.process_file(
+    workcell_description = xacro.process_file(
         str(xacro_file)
     ).toxml()
 
+    workcell_state_publisher = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        name="workcell_state_publisher",
+        output="screen",
+        parameters=[
+            {
+                "robot_description": workcell_description,
+                "use_sim_time": False,
+            }
+        ],
+        remappings=[
+            (
+                "robot_description",
+                "/workcell_description",
+            ),
+        ],
+    )
+
+    mount_lite6_to_workcell = Node(
+        package="tf2_ros",
+        executable="static_transform_publisher",
+        name="mount_lite6_to_workcell",
+        output="screen",
+        arguments=[
+            "--x", "0",
+            "--y", "0",
+            "--z", "0",
+            "--roll", "0",
+            "--pitch", "0",
+            "--yaw", "0",
+            "--frame-id", "robot_mount_frame",
+            "--child-frame-id", "world",
+        ],
+    )
+
     return LaunchDescription(
         [
-            Node(
-                package="robot_state_publisher",
-                executable="robot_state_publisher",
-                name="workcell_state_publisher",
-                output="screen",
-                parameters=[
-                    {
-                        "robot_description": robot_description,
-                        "use_sim_time": False,
-                    }
-                ],
-                remappings=[
-                    ("robot_description", "/workcell_description"),
-                ],
-            ),
-
-            Node(
-                package="rviz2",
-                executable="rviz2",
-                name="workcell_rviz",
-                output="screen",
-                #arguments=["-d",str(rviz_config)],
-            ),
+            workcell_state_publisher,
+            mount_lite6_to_workcell,
         ]
     )

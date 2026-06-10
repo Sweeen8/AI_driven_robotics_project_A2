@@ -1,1 +1,0 @@
-/home/student/Git-projects/AI_driven_robotics_project_A2/build/a2_workcell_description/ament_cmake_core/a2_workcell_descriptionConfig-version.cmake

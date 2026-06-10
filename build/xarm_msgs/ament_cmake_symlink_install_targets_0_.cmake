@@ -1,1 +1,0 @@
-ament_cmake_symlink_install_targets("TARGET_FILES" "/home/student/Git-projects/AI_driven_robotics_project_A2/build/xarm_msgs/rosidl_generator_py/xarm_msgs/xarm_msgs_s__rosidl_typesupport_fastrtps_c.so" "TARGETS" "xarm_msgs_s__rosidl_typesupport_fastrtps_c" "DESTINATION" "lib/python3.12/site-packages/xarm_msgs")

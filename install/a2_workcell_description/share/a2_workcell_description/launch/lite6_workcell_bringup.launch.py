@@ -1,1 +1,0 @@
-/home/student/Git-projects/AI_driven_robotics_project_A2/src/a2_workcell_description/launch/lite6_workcell_bringup.launch.py

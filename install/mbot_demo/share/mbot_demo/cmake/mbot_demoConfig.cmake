@@ -1,1 +1,0 @@
-/home/student/Git-projects/AI_driven_robotics_project_A2/build/mbot_demo/ament_cmake_core/mbot_demoConfig.cmake

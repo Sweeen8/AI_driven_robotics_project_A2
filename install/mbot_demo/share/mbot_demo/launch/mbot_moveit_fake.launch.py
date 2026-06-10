@@ -1,0 +1,1 @@
+/home/student/Git-projects/AI_driven_robotics_project_A2/src/xarm_ros2/demo/mbot_demo/launch/mbot_moveit_fake.launch.py

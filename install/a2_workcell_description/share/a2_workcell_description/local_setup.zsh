@@ -1,0 +1,1 @@
+/home/student/Git-projects/AI_driven_robotics_project_A2/build/a2_workcell_description/ament_cmake_environment_hooks/local_setup.zsh

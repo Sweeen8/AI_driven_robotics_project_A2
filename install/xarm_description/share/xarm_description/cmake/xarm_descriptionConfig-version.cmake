@@ -1,0 +1,1 @@
+/home/student/Git-projects/AI_driven_robotics_project_A2/build/xarm_description/ament_cmake_core/xarm_descriptionConfig-version.cmake

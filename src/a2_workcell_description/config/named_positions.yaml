@@ -1,0 +1,36 @@
+planning_group: lite6
+
+joint_names:
+  - joint1
+  - joint2
+  - joint3
+  - joint4
+  - joint5
+  - joint6
+
+positions:
+  home:
+    joints_rad:
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+  pick:
+    joints_rad:
+      - 0.555730
+      - 0.809641
+      - 1.650069
+      - 0.000035
+      - 0.840463
+      - 0.172875
+
+  sort:
+    joints_rad:
+      - -0.510177
+      - 0.764367
+      - 1.717421
+      - -0.000070
+      - 0.952950
+      - -0.510282

@@ -120,6 +120,14 @@
     <color rgba="0.30 0.30 0.30 1.0"/>
   </material>
 
+    <material name="blocker_red">
+    <color rgba="0.8 0.1 0.1 1.0"/>
+    </material>
+
+    <material name="standard_gray">
+    <color rgba="0.45 0.45 0.45 1.0"/>
+    </material>
+
   <!-- ====================================================== -->
   <!-- HERBRUIKBARE BOX-MACRO                                 -->
   <!-- ====================================================== -->
@@ -537,5 +545,140 @@
                + chair_back_height / 2.0}"
         rpy="0 0 0"/>
   </joint>
+    <!-- ========================= -->
+    <!-- Blocker screen assembly   -->
+    <!-- ========================= -->
+
+    <!-- 
+    Invisible assembly frame.
+    Move/rotate this frame, and the blocker + standards move together.
+    -->
+    <link name="blocker_assembly_frame"/>
+
+    <!-- 
+    Blocker/screen:
+    Real thickness is 0.5 mm, but visualized as 5 mm for RViz visibility.
+    Size:
+    width  = 0.300 m
+    thick  = 0.005 m
+    height = 0.375 m
+    -->
+    <link name="blocker_screen">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+        <box size="0.300 0.005 0.375"/>
+        </geometry>
+        <material name="blocker_red"/>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+        <box size="0.300 0.005 0.375"/>
+        </geometry>
+    </collision>
+    </link>
+
+   <!-- 
+    Left standard/support.
+    Reduced length from 10 cm to 8 cm so it does not stick out.
+    Size:
+    length = 0.080 m
+    width  = 0.050 m
+    height = 0.100 m
+    -->
+    <link name="blocker_standard_left">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+        <box size="0.080 0.050 0.100"/>
+        </geometry>
+        <material name="standard_gray"/>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+        <box size="0.080 0.050 0.100"/>
+        </geometry>
+    </collision>
+    </link>
+
+    <!-- 
+    Right standard/support.
+    Reduced length from 10 cm to 8 cm.
+    -->
+    <link name="blocker_standard_right">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+        <box size="0.080 0.050 0.100"/>
+        </geometry>
+        <material name="standard_gray"/>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+        <box size="0.080 0.050 0.100"/>
+        </geometry>
+    </collision>
+    </link>
+
+    <!-- 
+    Attach the entire blocker assembly to the work platform.
+
+    x = 0.000 keeps it centered left/right.
+    y = -0.150 places it in the middle/front area of the workspace.
+    yaw = 1.5708 rotates the entire blocker + standards 90 degrees.
+
+    Because the standards and screen are children of blocker_assembly_frame,
+    they rotate and move together.
+    -->
+    <joint name="blocker_assembly_joint" type="fixed">
+    <parent link="workcell_platform"/>
+    <child link="blocker_assembly_frame"/>
+    <origin xyz="0.000 -0.130 0.000" rpy="0 0 1.5708"/>
+    </joint>
+
+    <!-- 
+    Standards sit on top of the work platform.
+
+    z = platform_half_thickness + standard_half_height
+    z = 0.019/2 + 0.100/2
+    z = 0.0095 + 0.050
+    z = 0.0595
+    -->
+    <joint name="blocker_standard_left_joint" type="fixed">
+    <parent link="blocker_assembly_frame"/>
+    <child link="blocker_standard_left"/>
+    <origin xyz="-0.110 0.000 0.0595" rpy="0 0 0"/>
+    </joint>
+
+    <joint name="blocker_standard_right_joint" type="fixed">
+    <parent link="blocker_assembly_frame"/>
+    <child link="blocker_standard_right"/>
+    <origin xyz="0.110 0.000 0.0595" rpy="0 0 0"/>
+    </joint>
+
+    <!-- 
+    Screen is mounted on top of the standards and sinks into them by about 2.5 cm.
+
+    Standard top:
+    platform_half_thickness + standard_height
+    0.0095 + 0.100 = 0.1095
+
+    Screen bottom target:
+    standard_top - 0.025
+    0.1095 - 0.025 = 0.0845
+
+    Screen center:
+    screen_bottom + screen_height/2
+    0.0845 + 0.375/2
+    0.0845 + 0.1875 = 0.272
+    -->
+    <joint name="blocker_screen_joint" type="fixed">
+    <parent link="blocker_assembly_frame"/>
+    <child link="blocker_screen"/>
+    <origin xyz="0.000 0.000 0.272" rpy="0 0 0"/>
+    </joint>
 
 </robot>

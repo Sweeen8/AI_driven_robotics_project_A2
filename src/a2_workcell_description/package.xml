@@ -7,11 +7,10 @@
 <package format="3">
 
   <name>a2_workcell_description</name>
-
   <version>0.1.0</version>
 
   <description>
-    URDF- en Xacro-beschrijving van de A2-werkomgeving
+    URDF-, Xacro- en MoveIt-beschrijving van de A2-werkomgeving
     voor de UFACTORY Lite 6.
   </description>
 
@@ -23,6 +22,13 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <depend>geometry_msgs</depend>
+  <depend>moveit_msgs</depend>
+  <depend>moveit_ros_planning_interface</depend>
+  <depend>rclcpp</depend>
+  <depend>shape_msgs</depend>
+
+  <exec_depend>phyton3-yaml</exec_depend>
   <exec_depend>ament_index_python</exec_depend>
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
@@ -31,6 +37,9 @@
   <exec_depend>tf2_ros</exec_depend>
   <exec_depend>xacro</exec_depend>
   <exec_depend>xarm_moveit_config</exec_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

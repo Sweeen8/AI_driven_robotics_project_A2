@@ -549,89 +549,85 @@
     <!-- Blocker screen assembly   -->
     <!-- ========================= -->
 
-    <!-- 
+    <!--
     Invisible assembly frame.
     Move/rotate this frame, and the blocker + standards move together.
     -->
     <link name="blocker_assembly_frame"/>
 
-    <!-- 
+    <!--
     Blocker/screen:
-    Real thickness is 0.5 mm, but visualized as 5 mm for RViz visibility.
-    Size:
-    width  = 0.300 m
-    thick  = 0.005 m
-    height = 0.375 m
+    width     = 28 cm
+    thickness = 0.1 cm
+    height    = 36.5 cm
+    Hovers 1.9 cm above the platform surface.
+    Sinks ~5 cm into the top of the standard slot.
+
+    Z centre = platform_top + gap + height/2
+             = 0.0095 + 0.019 + 0.1825
+             = 0.2110 m
     -->
     <link name="blocker_screen">
     <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-        <box size="0.300 0.005 0.375"/>
+        <box size="0.280 0.001 0.365"/>
         </geometry>
         <material name="blocker_red"/>
     </visual>
     <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-        <box size="0.300 0.005 0.375"/>
+        <box size="0.280 0.001 0.365"/>
         </geometry>
     </collision>
     </link>
 
-   <!-- 
+    <!--
     Left standard/support.
-    Reduced length from 10 cm to 8 cm so it does not stick out.
-    Size:
-    length = 0.080 m
-    width  = 0.050 m
-    height = 0.100 m
+    length    = 11 cm  (along blocker width axis)
+    thickness = 2 cm
+    height    = 6 cm
+    Sticks out 1.35 cm beyond each outer edge of the blocker.
+    Standard centre X = blocker_half_width + 1.35 - standard_half_length
+                      = 14 + 1.35 - 5.5 = 9.85 cm = 0.0985 m
+    Z centre = platform_top + height/2 = 0.0095 + 0.030 = 0.0395 m
     -->
     <link name="blocker_standard_left">
     <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-        <box size="0.080 0.050 0.100"/>
+        <box size="0.110 0.020 0.060"/>
         </geometry>
         <material name="standard_gray"/>
     </visual>
     <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-        <box size="0.080 0.050 0.100"/>
+        <box size="0.110 0.020 0.060"/>
         </geometry>
     </collision>
     </link>
 
-    <!-- 
-    Right standard/support.
-    Reduced length from 10 cm to 8 cm.
-    -->
     <link name="blocker_standard_right">
     <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-        <box size="0.080 0.050 0.100"/>
+        <box size="0.110 0.020 0.060"/>
         </geometry>
         <material name="standard_gray"/>
     </visual>
     <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-        <box size="0.080 0.050 0.100"/>
+        <box size="0.110 0.020 0.060"/>
         </geometry>
     </collision>
     </link>
 
-    <!-- 
+    <!--
     Attach the entire blocker assembly to the work platform.
-
-    x = 0.000 keeps it centered left/right.
-    y = -0.150 places it in the middle/front area of the workspace.
-    yaw = 1.5708 rotates the entire blocker + standards 90 degrees.
-
-    Because the standards and screen are children of blocker_assembly_frame,
-    they rotate and move together.
+    yaw = 1.5708 rotates the assembly 90 degrees so local X → world Y.
     -->
     <joint name="blocker_assembly_joint" type="fixed">
     <parent link="workcell_platform"/>
@@ -639,46 +635,140 @@
     <origin xyz="0.000 -0.130 0.000" rpy="0 0 1.5708"/>
     </joint>
 
-    <!-- 
-    Standards sit on top of the work platform.
-
-    z = platform_half_thickness + standard_half_height
-    z = 0.019/2 + 0.100/2
-    z = 0.0095 + 0.050
-    z = 0.0595
-    -->
     <joint name="blocker_standard_left_joint" type="fixed">
     <parent link="blocker_assembly_frame"/>
     <child link="blocker_standard_left"/>
-    <origin xyz="-0.110 0.000 0.0595" rpy="0 0 0"/>
+    <origin xyz="-0.0985 0.000 0.0395" rpy="0 0 0"/>
     </joint>
 
     <joint name="blocker_standard_right_joint" type="fixed">
     <parent link="blocker_assembly_frame"/>
     <child link="blocker_standard_right"/>
-    <origin xyz="0.110 0.000 0.0595" rpy="0 0 0"/>
+    <origin xyz="0.0985 0.000 0.0395" rpy="0 0 0"/>
     </joint>
 
-    <!-- 
-    Screen is mounted on top of the standards and sinks into them by about 2.5 cm.
-
-    Standard top:
-    platform_half_thickness + standard_height
-    0.0095 + 0.100 = 0.1095
-
-    Screen bottom target:
-    standard_top - 0.025
-    0.1095 - 0.025 = 0.0845
-
-    Screen center:
-    screen_bottom + screen_height/2
-    0.0845 + 0.375/2
-    0.0845 + 0.1875 = 0.272
-    -->
     <joint name="blocker_screen_joint" type="fixed">
     <parent link="blocker_assembly_frame"/>
     <child link="blocker_screen"/>
-    <origin xyz="0.000 0.000 0.272" rpy="0 0 0"/>
+    <origin xyz="0.000 0.000 0.2110" rpy="0 0 0"/>
     </joint>
+
+  <!-- ====================================================== -->
+  <!-- CAMERA STANDAARD                                       -->
+  <!-- ====================================================== -->
+  <!--
+    Meetinformatie:
+    - Paal: cilinder, radius 2.5 cm, hoogte 50.5 cm
+    - Connector: beugel tussen paal en balk, 6x4x7.5 cm
+    - Balk: 43.5 cm lang, 2.5 cm diep, 5 cm hoog
+    - Paal bevestigd op 26.5 cm van de linkerrand van de balk
+
+    Positie op het werkplatform:
+    - 8.5 cm van de rechterrand  → X = +0.4 − 0.085 = +0.315
+    - 13.25 cm van de achterrand → Y = +0.3 − 0.1325 = +0.1675
+
+    Draaihoek van de gehele standaard om de eigen Z-as (radialen).
+    Verander ALLEEN deze waarde om de balk + connector + paal
+    als één geheel te draaien.
+  -->
+  <!--
+    Camera standaard — nieuwe geometrie (2×2 cm vierkante profielen).
+
+    Staande paal  : 2 cm × 2 cm doorsnede, hoogte 67.7 cm.
+    Zijdelingse balk: 2 cm × 2 cm doorsnede, totale lengte 43 cm.
+      - 1.6 cm steekt uit voorbij de staande paal (stub zijde, +X)
+      - 2.0 cm binnen de staande paal (breedte paal)
+      - 39.4 cm naar de camerazijde (−X)
+      → balk loopt van x=+0.026 tot x=−0.404 (midden paal = x=0)
+      → balkcentrum x = (0.026 − 0.404) / 2 = −0.189 m van paalas
+    Balk hoogte: 2 cm onder de bovenkant van de staande paal
+      → balk TOP = 0.677/2 − 0.020 = 0.3185 m boven paalcentrum
+      → balkcentrum z = 0.3185 − 0.010 = 0.3085 m boven paalcentrum
+
+    Camera : 3.6 cm van de verre rand van de balk
+      → balk verre rand x = −0.404 m
+      → camera linkerrand  x = −0.404 + 0.036 = −0.368 m
+      → camera centrum     x = −0.368 + 0.025 = −0.343 m
+      → hangt onder de balk: z = −(0.020/2 + 0.045/2) = −0.0325 m
+  -->
+  <!-- Yaw = 65°. Applied once at the pole base; bar and camera rotate with it. -->
+  <xacro:property name="camera_stand_yaw" value="${65.0 * pi / 180.0}"/>
+
+  <!-- Staande paal: 2×2×67.7 cm vierkant profiel -->
+  <link name="camera_pole">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.020 0.020 0.677"/>
+      </geometry>
+      <material name="dark_grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.020 0.020 0.677"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Positie: 5.5 cm van rechterrand (X=0.40) en 4 cm van achterrand (Y=0.30). -->
+  <joint name="workcell_platform_to_camera_pole" type="fixed">
+    <parent link="workcell_platform"/>
+    <child link="camera_pole"/>
+    <origin
+        xyz="0.345 0.260 ${platform_thickness / 2.0 + 0.677 / 2.0}"
+        rpy="0 0 ${camera_stand_yaw}"/>
+  </joint>
+
+  <!--
+    Zijdelingse balk: 2×2×43 cm.
+    Centrum op x=−0.189 m (van de paalas), z=+0.3085 m (van het paalcentrum).
+  -->
+  <link name="camera_bar">
+    <visual>
+      <origin xyz="-0.189 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.430 0.020 0.020"/>
+      </geometry>
+      <material name="dark_grey"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.189 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.430 0.020 0.020"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="camera_pole_to_bar" type="fixed">
+    <parent link="camera_pole"/>
+    <child link="camera_bar"/>
+    <origin xyz="0 0 0.3085" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Camera body: 5×11×4.5 cm, hangt onder de balk -->
+  <link name="camera_body">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.050 0.110 0.045"/>
+      </geometry>
+      <material name="camera_black">
+        <color rgba="0.05 0.05 0.05 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.050 0.110 0.045"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="camera_bar_to_camera" type="fixed">
+    <parent link="camera_bar"/>
+    <child link="camera_body"/>
+    <origin xyz="-0.343 0 ${-(0.020 / 2.0 + 0.045 / 2.0)}" rpy="0 0 0"/>
+  </joint>
 
 </robot>

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+  Lite6 built-in two-finger gripper attached to link6.
+
+  This file is loaded by a SEPARATE robot_state_publisher alongside the
+  Lite6's own RSP (started by MoveIt / lite6_moveit_fake.launch.py).
+
+  How TF is stitched together:
+    Lite6 RSP  → ... → link5 → link6
+    Gripper RSP → link6 → uflite_gripper_link → (finger joints)
+
+  link6 is declared here as an empty root link so the URDF parser is
+  happy.  Its actual transform (relative to link5) comes from the
+  Lite6 RSP — TF merges both sources automatically.
+
+  Control: the gripper is driven via the xArm SDK (guarded_fast_sdk_controller.py),
+  NOT via ros2_control, so only the URDF visual/collision macro is used.
+-->
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="lite6_uflite_gripper">
+
+  <!-- Required properties for xarm_description mesh macros -->
+  <xacro:property name="mesh_suffix" value="stl"/>
+  <xacro:property name="mesh_path"   value="package://xarm_description/meshes"/>
+
+  <!-- Material definitions (White is used by the gripper shell) -->
+  <xacro:include filename="$(find xarm_description)/urdf/common/common.material.xacro"/>
+  <xacro:common_material prefix=""/>
+
+  <!-- Common link/mesh macros -->
+  <xacro:include filename="$(find xarm_description)/urdf/common/common.link.xacro"/>
+
+  <!-- UFLite gripper URDF (visual + collision only, no ros2_control) -->
+  <xacro:include filename="$(find xarm_description)/urdf/gripper/uflite_gripper.urdf.xacro"/>
+
+  <!-- Virtual root: mirrors link6 from the Lite6 RSP. -->
+  <link name="link6"/>
+
+  <!-- Attach gripper shell to link6 at origin (no offset needed). -->
+  <xacro:uflite_gripper_urdf
+      prefix=""
+      attach_to="link6"
+      attach_xyz="0 0 0"
+      attach_rpy="0 0 0"
+      gripper_version="G1"/>
+
+</robot>

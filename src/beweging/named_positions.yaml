@@ -1,0 +1,91 @@
+planning_group: lite6
+
+joint_names:
+  - joint1
+  - joint2
+  - joint3
+  - joint4
+  - joint5
+  - joint6
+
+positions:
+  home:
+    joints_rad:
+      - 0.000000
+      - 0.000000
+      - 0.000000
+      - 0.000000
+      - 0.000000
+      - 0.000000
+
+  pick:
+    # UFACTORY Studio:
+    # J1=32.8, J2=21.8, J3=77.8, J4=24.2, J5=-55.3, J6=122.8 deg
+    joints_rad:
+      - 0.572468
+      - 0.380482
+      - 1.357611
+      - 0.422370
+      - -0.965422
+      - 0.0
+
+  safe_crossing:
+    # UFACTORY Studio:
+    # J1=0.0, J2=25.0, J3=115.0, J4=15.0, J5=-90.0, J6=7.5 deg
+    joints_rad:
+      - 0.000000
+      - 0.436332
+      - 2.007129
+      - 0.261799
+      - -1.570796
+      - 0.0
+  home_pick_turn:
+    # From home: rotate J1 toward pick side only.
+    # degrees: J1 = 30, rest = 0
+    joints_rad:
+      - 0.523599
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+
+  home_sort_turn:
+    # From home: rotate J1 toward sort side only.
+    # degrees: J1 = -35, rest = 0
+    joints_rad:
+      - -0.610865
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+
+  pick_lift:
+    joints_rad:
+      - 0.572468
+      - 0.380482
+      - 2.007129
+      - 0.523599
+      - -1.570796
+      - 0.000000
+
+  sort_lift:
+    joints_rad:
+      - -0.610865
+      - 0.380482
+      - 2.007129
+      - 0.523599
+      - -1.570796
+      - 0.000000
+
+  sort:
+    # UFACTORY Studio:
+    # J1=-35, J2=20, J3=115, J4=30, J5=-90, J6=0 deg
+    joints_rad:
+      - -0.610865
+      - 0.349066
+      - 2.007129
+      - 0.523599
+      - -1.570796
+      - 0.000000

@@ -40,11 +40,10 @@ install(
 
 install(
   PROGRAMS
-    scripts/robot_position_monitor.py
-    scripts/named_position_commander.py
-    scripts/RobotController.py
-    scripts/functions.py
-    scripts/cartesian_sort_arch_commander.py
+  scripts/RobotController.py
+  scripts/functions.py
+  scripts/named_position_commander.py
+  scripts/robot_position_monitor.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -56,6 +55,7 @@ install(
     urdf
   DESTINATION share/${PROJECT_NAME}
 )
+
 
 ament_package()
 

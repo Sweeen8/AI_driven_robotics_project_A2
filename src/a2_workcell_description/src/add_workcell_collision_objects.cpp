@@ -67,6 +67,46 @@ moveit_msgs::msg::CollisionObject make_box(
   return object;
 }
 
+moveit_msgs::msg::CollisionObject make_cylinder(
+  const std::string & id,
+  const std::string & frame_id,
+  const double radius,
+  const double height,
+  const double x,
+  const double y,
+  const double z)
+{
+  moveit_msgs::msg::CollisionObject object;
+
+  object.header.frame_id = frame_id;
+  object.id = id;
+
+  shape_msgs::msg::SolidPrimitive primitive;
+  primitive.type = shape_msgs::msg::SolidPrimitive::CYLINDER;
+  primitive.dimensions.resize(2);
+
+  primitive.dimensions[
+    shape_msgs::msg::SolidPrimitive::CYLINDER_HEIGHT
+  ] = height;
+
+  primitive.dimensions[
+    shape_msgs::msg::SolidPrimitive::CYLINDER_RADIUS
+  ] = radius;
+
+  geometry_msgs::msg::Pose pose;
+  pose.position.x = x;
+  pose.position.y = y;
+  pose.position.z = z;
+  pose.orientation.w = 1.0;
+
+  object.primitives.push_back(primitive);
+  object.primitive_poses.push_back(pose);
+  object.operation =
+    moveit_msgs::msg::CollisionObject::ADD;
+
+  return object;
+}
+
 }  // namespace
 
 int main(int argc, char ** argv)
@@ -382,50 +422,122 @@ int main(int argc, char ** argv)
   const double blocker_yaw = 1.5708;
   const double platform_center_z = 0.7995;
 
-  // Red blocker screen.
+  // Red blocker screen: 28 cm wide x 0.1 cm thick x 36.5 cm tall.
+  // Hovers 1.9 cm above platform. Z centre = platform_center_z + 0.2110 m.
   objects.push_back(
     make_box(
       "blocker_screen_collision",
       frame,
-      0.300,
-      0.005,
-      0.375,
+      0.280,
+      0.001,
+      0.365,
       0.000,
       -0.130,
-      platform_center_z + 0.272,
+      platform_center_z + 0.2110,
       blocker_yaw
     )
   );
 
-  // Left standard/support.
+  // Left standard: 11 cm long x 2 cm thick x 6 cm tall.
+  // Assembly local X=-0.0985 → world Y = -0.130 + (-0.0985) = -0.2285 m
   objects.push_back(
     make_box(
       "blocker_standard_left_collision",
       frame,
-      0.080,
-      0.050,
-      0.100,
+      0.110,
+      0.020,
+      0.060,
       0.000,
-      -0.240,
-      platform_center_z + 0.0595,
+      -0.2285,
+      platform_center_z + 0.0395,
       blocker_yaw
     )
   );
 
-  // Right standard/support.
+  // Right standard: 11 cm long x 2 cm thick x 6 cm tall.
+  // Assembly local X=+0.0985 → world Y = -0.130 + 0.0985 = -0.0315 m
   objects.push_back(
     make_box(
       "blocker_standard_right_collision",
       frame,
-      0.080,
-      0.050,
-      0.100,
+      0.110,
+      0.020,
+      0.060,
       0.000,
-      -0.020,
-      platform_center_z + 0.0595,
+      -0.0315,
+      platform_center_z + 0.0395,
       blocker_yaw
     )
   );
+
+  // ==========================================================
+  // Camera standaard (vernieuwd — 2×2 cm vierkante profielen)
+  // ==========================================================
+  //
+  // Positie: 5.5 cm van rechterrand (X=0.40) en 4 cm van achterrand (Y=0.30).
+  //   paal X = 0.40 - 0.055 = 0.345 m
+  //   paal Y = 0.30 - 0.040 = 0.260 m
+  //   platform top = 0.7995 + 0.019/2 = 0.809 m
+  //
+  // Staande paal: 2×2×67.7 cm
+  //   centrum Z = 0.809 + 0.677/2 = 1.1475 m
+  //
+  // Zijdelingse balk: 43 cm, yaw = +65°, locaal centrum x = -0.189 m, z = +0.3085 m
+  //   X = 0.345 - 0.189*cos(65°) = 0.2651 m
+  //   Y = 0.260 - 0.189*sin(65°) = 0.0887 m
+  //   Z = 1.1475 + 0.3085         = 1.4560 m
+  //
+  // Camera: lokaal x = -0.343 m, z = 0.2760 m boven paalcentrum
+  //   X = 0.345 - 0.343*cos(65°) = 0.2000 m
+  //   Y = 0.260 - 0.343*sin(65°) = -0.0509 m
+  //   Z = 1.1475 + 0.2760         = 1.4235 m
+  {
+    const double camera_bar_yaw = 65.0 * M_PI / 180.0;
+
+    // Staande paal (2×2×67.7 cm vierkant profiel).
+    objects.push_back(
+      make_box(
+        "camera_pole_collision",
+        frame,
+        0.020,
+        0.020,
+        0.677,
+        0.345,
+        0.260,
+        1.1475
+      )
+    );
+
+    // Zijdelingse balk (2×2×43 cm), gedraaid +45°.
+    objects.push_back(
+      make_box(
+        "camera_bar_collision",
+        frame,
+        0.430,
+        0.020,
+        0.020,
+        0.2651,
+        0.0887,
+        1.4560,
+        camera_bar_yaw
+      )
+    );
+
+    // Camera body (5×11×4.5 cm), gedraaid +65°.
+    objects.push_back(
+      make_box(
+        "camera_body_collision",
+        frame,
+        0.050,
+        0.110,
+        0.045,
+        0.2000,
+        -0.0509,
+        1.4235,
+        camera_bar_yaw
+      )
+    );
+  }
 
   // ==========================================================
   // Apply collision objects
